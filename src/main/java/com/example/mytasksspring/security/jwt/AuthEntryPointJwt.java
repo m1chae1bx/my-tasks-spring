@@ -1,10 +1,15 @@
 package com.example.mytasksspring.security.jwt;
 
 import java.io.IOException;
+import java.io.OutputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +26,16 @@ public class AuthEntryPointJwt implements AuthenticationEntryPoint {
   public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException)
       throws IOException, ServletException {
     logger.error("Unauthorized error: {}", authException.getMessage());
-    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Error: Unauthorized");
+    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+    response.setContentType("application/json");
+    response.setCharacterEncoding("UTF-8");
+    Map<String, Object> data = new HashMap<>();
+    data.put("code", "badCredentials");
+    data.put("message", authException.getMessage());
+    ObjectMapper objectMapper = new ObjectMapper();
+    OutputStream out = response.getOutputStream();
+    objectMapper.writerWithDefaultPrettyPrinter().writeValue(out, data);
+    out.flush();
   }
   
 }
