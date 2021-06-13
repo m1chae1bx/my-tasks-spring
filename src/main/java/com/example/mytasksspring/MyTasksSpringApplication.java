@@ -12,6 +12,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 // import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
+@EnableMongoAuditing
 public class MyTasksSpringApplication {
 
   public static void main(String[] args) {
@@ -33,6 +34,7 @@ public class MyTasksSpringApplication {
   // 	};
   // }
 
+  // Run only when there's a new db
   // @Bean
   // CommandLineRunner runner(RoleRepository repository) {
   //   return args -> {
