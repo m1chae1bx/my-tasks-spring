@@ -1,4 +1,6 @@
-package com.example.mytasksspring.model;
+package com.example.mytasksspring.repository;
+
+import com.example.mytasksspring.model.Task;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 

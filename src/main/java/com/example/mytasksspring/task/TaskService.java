@@ -1,10 +1,10 @@
-package com.example.mytasksspring.service;
+package com.example.mytasksspring.task;
 
 import java.util.List;
 import java.util.Optional;
 
 import com.example.mytasksspring.model.Task;
-import com.example.mytasksspring.model.TaskRepository;
+import com.example.mytasksspring.repository.TaskRepository;
 
 import org.springframework.stereotype.Service;
 

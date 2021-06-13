@@ -1,12 +1,11 @@
-package com.example.mytasksspring.model;
+package com.example.mytasksspring.repository;
 
 import java.util.List;
 
+import com.example.mytasksspring.model.Task;
+
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.aggregation.Aggregation;
-import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
-// import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
 import lombok.AllArgsConstructor;

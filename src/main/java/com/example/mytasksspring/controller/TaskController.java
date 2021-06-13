@@ -4,10 +4,11 @@ import java.util.List;
 import java.util.Optional;
 
 import com.example.mytasksspring.model.Task;
-import com.example.mytasksspring.service.TaskService;
+import com.example.mytasksspring.task.TaskService;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,6 +39,7 @@ public class TaskController {
   // }
 
   @GetMapping
+  @PreAuthorize("hasRole('USER')")
   public ResponseEntity<List<Task>> getAllMatch(
     @RequestParam(value = "name", required = false) String name
   ) {
@@ -46,22 +48,26 @@ public class TaskController {
   
 
   @GetMapping("{id}")
+  @PreAuthorize("hasRole('USER')")
   public ResponseEntity<Optional<Task>> get(@PathVariable String id) {
     return ResponseEntity.ok(service.get(id));
   }
 
   @PostMapping
+  @PreAuthorize("hasRole('USER')")
   public ResponseEntity<Task> create(@RequestBody Task task) {
     return ResponseEntity.status(HttpStatus.CREATED).body(service.create(task));
   }
 
   @DeleteMapping("{id}")
+  @PreAuthorize("hasRole('USER')")
   public ResponseEntity<String> delete(@PathVariable String id) {
     service.delete(id);
-    return ResponseEntity.ok("Task " + id + "has been deleted");
+    return ResponseEntity.ok("Task " + id + " has been deleted");
   }
 
   @PutMapping
+  @PreAuthorize("hasRole('USER')")
   public ResponseEntity<Task> update(@RequestBody Task task) {
     return ResponseEntity.ok(service.update(task));   
   }

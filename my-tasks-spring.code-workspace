@@ -7,5 +7,7 @@
 			"path": "../Portfolio/planner-server"
 		}
 	],
-	"settings": {}
+	"settings": {
+		"java.configuration.updateBuildConfiguration": "interactive"
+	}
 }
