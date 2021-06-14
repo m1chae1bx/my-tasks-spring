@@ -19,6 +19,7 @@ import com.example.mytasksspring.security.payload.request.SignupRequest;
 import com.example.mytasksspring.security.payload.response.JwtResponse;
 import com.example.mytasksspring.security.payload.response.MessageResponse;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -50,9 +51,10 @@ public class AuthController {
       new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())
     );
 
-    SecurityContextHolder.getContext().setAuthentication(authentication);
-    String jwt = jwtUtils.generateJwtToken(authentication);
+    SecurityContextHolder.getContext().setAuthentication(authentication);    
+
     UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+    String jwt = jwtUtils.generateJwtToken(userDetails.getUsername(), userDetails.getId());
     List<String> roles = userDetails.getAuthorities().stream()
       .map(item -> item.getAuthority())
       .collect(Collectors.toList());
@@ -70,16 +72,16 @@ public class AuthController {
 
   @PostMapping("/register")
   public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
-    if (userRepository.existsByUsername(signUpRequest.getUsername())) {
-      return ResponseEntity
-          .badRequest()
-          .body(new MessageResponse("Error: Username is already taken!", "usernameUnavailable"));
-    }
-
     if (userRepository.existsByEmail(signUpRequest.getEmail())) {
       return ResponseEntity
-          .badRequest()
-          .body(new MessageResponse("Error: Email is already in use!", "emailUnavailable"));
+        .status(HttpStatus.CONFLICT)
+        .body(new MessageResponse("Error: Email is already in use!", "emailUnavailable"));
+    }
+
+    if (userRepository.existsByUsername(signUpRequest.getUsername())) {
+      return ResponseEntity
+        .status(HttpStatus.CONFLICT)
+        .body(new MessageResponse("Error: Username is already taken!", "usernameUnavailable"));
     }
 
     // Create new user's account
@@ -118,6 +120,19 @@ public class AuthController {
     user.setRoles(roles);
     userRepository.save(user);
 
-    return ResponseEntity.ok(new MessageResponse("User registered successfully!", null));
+    String jwt = jwtUtils.generateJwtToken(user.getUsername(), user.getId());
+    List<String> roleList = user.getRoles().stream()
+      .map(item -> item.getName().name())
+      .collect(Collectors.toList());
+
+    return ResponseEntity.ok(
+      new JwtResponse(
+        jwt, 
+        user.getId(), 
+        user.getUsername(), 
+        user.getEmail(), 
+        roleList
+      )
+    );
   }
 }

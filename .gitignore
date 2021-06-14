@@ -31,7 +31,9 @@ build/
 
 ### VS Code ###
 .vscode/
+my-tasks-spring.code-workspace
 
 ### Mac ###
 .DS_Store
 *.mongodb
+

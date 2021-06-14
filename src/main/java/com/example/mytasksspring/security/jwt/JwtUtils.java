@@ -22,13 +22,13 @@ public class JwtUtils {
   @Value("${mytasks.app.jwtExpirationMs}")
   private int jwtExpirationMs;
 
-  public String generateJwtToken(Authentication authentication) {
-    UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
-
+  public String generateJwtToken(String username, String id) {
+    
     return Jwts.builder()
-      .setSubject(userPrincipal.getUsername())
+      .setSubject(username)
       .setIssuedAt(new Date())
       .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
+      .claim("id", id)
       .signWith(SignatureAlgorithm.HS512, jwtSecret)
       .compact();
   }

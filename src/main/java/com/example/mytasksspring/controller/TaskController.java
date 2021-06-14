@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.example.mytasksspring.model.Task;
+import com.example.mytasksspring.security.payload.response.MessageResponse;
 import com.example.mytasksspring.task.TaskService;
 
 import org.springframework.http.HttpStatus;
@@ -61,9 +62,10 @@ public class TaskController {
 
   @DeleteMapping("{id}")
   @PreAuthorize("hasRole('USER')")
-  public ResponseEntity<String> delete(@PathVariable String id) {
+  public ResponseEntity<MessageResponse> delete(@PathVariable String id) {
     service.delete(id);
-    return ResponseEntity.ok("Task " + id + " has been deleted");
+    
+    return ResponseEntity.ok().body(new MessageResponse("Task " + id + " has been deleted", "usernameUnavailable"));
   }
 
   @PutMapping
