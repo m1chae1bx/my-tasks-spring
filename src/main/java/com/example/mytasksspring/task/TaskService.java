@@ -1,5 +1,6 @@
 package com.example.mytasksspring.task;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,8 +21,13 @@ public class TaskService {
     return repository.findAll();
   }
 
-  public List<Task> getAllMatch(String name) {
-    return repository.findAllMatch(name);
+  public List<Task> getAllMatch(
+    String name,
+    String dateFilter,
+    Date today,
+    Boolean completed
+  ) {
+    return repository.findAllMatch(name, dateFilter, today, completed);
   }
 
   public Optional<Task> get(String id) {
@@ -40,16 +46,9 @@ public class TaskService {
     Task savedTask = repository.findById(task.getId())
       .orElseThrow(() -> new RuntimeException(String.format("Cannot find task with id %s", task.getId())));
 
-    if (task.getName() != null)
       savedTask.setName(task.getName());
-    
-    if (task.getDesc() != null)
       savedTask.setDesc(task.getDesc());
-    
-    if (task.getDueDate() != null)
       savedTask.setDueDate(task.getDueDate());
-    
-    if (task.getCompleted() != null)
       savedTask.setCompleted(task.getCompleted());
 
     return repository.save(savedTask);

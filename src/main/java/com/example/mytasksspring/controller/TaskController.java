@@ -1,5 +1,6 @@
 package com.example.mytasksspring.controller;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -7,6 +8,7 @@ import com.example.mytasksspring.model.Task;
 import com.example.mytasksspring.security.payload.response.MessageResponse;
 import com.example.mytasksspring.task.TaskService;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -42,9 +44,12 @@ public class TaskController {
   @GetMapping
   @PreAuthorize("hasRole('USER')")
   public ResponseEntity<List<Task>> getAllMatch(
-    @RequestParam(value = "name", required = false) String name
+    @RequestParam(value = "name", required = false) String name,
+    @RequestParam(value = "dueDate", required = false) String dateFilter,
+    @RequestParam(value = "today", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date today,
+    @RequestParam(value = "completed", required = false) Boolean completed
   ) {
-    return ResponseEntity.ok(service.getAllMatch(name));
+    return ResponseEntity.ok(service.getAllMatch(name, dateFilter, today, completed));
   }
   
 
