@@ -18,4 +18,18 @@ public class UserService {
     return repository.findById(id);
   }
 
+  public void delete(String id) {
+    repository.deleteById(id);
+  }
+
+  public User update(User user) {
+    User savedUser = repository.findById(user.getId())
+      .orElseThrow(() -> new RuntimeException(String.format("Cannot find user with id %s", user.getId())));
+
+      savedUser.setFullName(user.getFullName());
+      savedUser.setNickname(user.getNickname());
+
+    return repository.save(savedUser);
+  }
+
 }
