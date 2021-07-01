@@ -42,9 +42,9 @@ public class TaskService {
     repository.deleteById(id);
   }
 
-  public Task update(Task task) {
-    Task savedTask = repository.findById(task.getId())
-      .orElseThrow(() -> new RuntimeException(String.format("Cannot find task with id %s", task.getId())));
+  public Task update(Task task, String id) {
+    Task savedTask = repository.findById(id)
+      .orElseThrow(() -> new RuntimeException(String.format("Cannot find task with id %s", id)));
 
       savedTask.setName(task.getName());
       savedTask.setDesc(task.getDesc());

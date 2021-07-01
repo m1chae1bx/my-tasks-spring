@@ -5,4 +5,5 @@
 # Serve Backend (Spring)
 cd "$(dirname "$0")"
 echo $PWD
+echo "Executing... ./mvnw spring-boot:run"
 ./mvnw spring-boot:run

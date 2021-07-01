@@ -73,10 +73,10 @@ public class TaskController {
     return ResponseEntity.ok().body(new MessageResponse("Task " + id + " has been deleted", "usernameUnavailable"));
   }
 
-  @PutMapping
+  @PutMapping("{id}")
   @PreAuthorize("hasRole('USER')")
-  public ResponseEntity<Task> update(@RequestBody Task task) {
-    return ResponseEntity.ok(service.update(task));   
+  public ResponseEntity<Task> update(@RequestBody Task task, @PathVariable String id) {
+    return ResponseEntity.ok(service.update(task, id));   
   }
 
 }
